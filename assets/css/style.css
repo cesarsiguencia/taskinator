@@ -117,6 +117,12 @@ footer {
   font-size: 1.8rem;
 }
 
+main  {
+  display: flex;
+  flex: 0.5;
+  padding-bottom: 40px;
+}
+
 .task-type {
   color: var(--secondary);
   font-size: 1.55rem;
