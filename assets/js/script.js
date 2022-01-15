@@ -1,6 +1,7 @@
 var taskIdCounter  = 0;
 var formEl = document.querySelector("#task-form");
 var tasksToDoEl = document.querySelector("#tasks-to-do");
+var pageContentEl = document.querySelector("#page-content")
 
 var taskFormHandler = function(event){
 
@@ -57,7 +58,7 @@ var createTaskEl = function (taskDataObj) {
 
 };
 
-var createTaskActions = function(taskId) {
+var createTaskActions = function(taskIdNumber) {
   var actionContainerEl = document.createElement("div");
   actionContainerEl.className = "task-actions";
 
@@ -65,7 +66,7 @@ var createTaskActions = function(taskId) {
   var editButtonEl = document.createElement("button");
   editButtonEl.textContent = "Edit";
   editButtonEl.className = "btn edit-btn"
-  editButtonEl.setAttribute("data-task-id", taskId);
+  editButtonEl.setAttribute("data-task-id", taskIdNumber);
 
   actionContainerEl.appendChild(editButtonEl);
 
@@ -73,14 +74,14 @@ var createTaskActions = function(taskId) {
   var deleteButtonEl = document.createElement("button");
   deleteButtonEl.textContent = "Delete";
   deleteButtonEl.className = "btn delete-btn"
-  deleteButtonEl.setAttribute("data-task-id", taskId);
+  deleteButtonEl.setAttribute("data-task-id", taskIdNumber);
 
   actionContainerEl.appendChild(deleteButtonEl);
 
   var statusSelectEl = document.createElement("select");
   statusSelectEl.className = "select-status";
   statusSelectEl.setAttribute("name", "status-change");
-  statusSelectEl.setAttribute("data-task-id", taskId);
+  statusSelectEl.setAttribute("data-task-id", taskIdNumber);
 
 
 
@@ -105,5 +106,37 @@ var createTaskActions = function(taskId) {
 
 
 
-formEl.addEventListener("submit", taskFormHandler); // <--- EXECUTE THE ENTIRE FUNCTION ABOVE, I don't know what submit is though
+formEl.addEventListener("submit", taskFormHandler); // <--- EXECUTE THE ENTIRE FUNCTION ABOVE, submit refers to the form listening action.
+
+//ADDING EFFECTS
+
+//CAPTURING THE ELEMENT WE WANT USING OUR NEWLY CREATED ATTRIBUTE IN JS
+
+var taskButtonHandler = function(event){
+  console.log(event.target);
+//CREATING AN EVENT WHERE .DELETE BTN IS TOUCHED
+  if (event.target.matches(".delete-btn")){
+    console.log("you clicked a delete button!");
+    //get the element's correct task id
+    var taskId = event.target.getAttribute("data-task-id");
+    console.log(taskId);
+    deleteTask(taskId);
+  }
+
+};
+
+pageContentEl.addEventListener("click", taskButtonHandler)
+
+var deleteTask = function(taskId){
+  //selecting the LI element through .task-item and using the data-task-id attribute with number to grab the correct LI that we are trying to delete. 
+  var taskSelected = document.querySelector(".task-item[data-task-id='"+ taskId + "']");
+  console.log(taskSelected);
+  //removing the selected LI for good
+  taskSelected.remove();
+  
+ 
+};
+
+
+
 

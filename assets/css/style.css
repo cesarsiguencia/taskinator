@@ -81,6 +81,7 @@ footer {
   flex-wrap: wrap;
   justify-content: center;
   margin: 25px auto;
+  padding: 10px;
   width: 95%;
 }
 
@@ -115,12 +116,6 @@ footer {
 .task-name {
   margin: 0;
   font-size: 1.8rem;
-}
-
-main  {
-  display: flex;
-  flex: 0.5;
-  padding-bottom: 40px;
 }
 
 .task-type {
