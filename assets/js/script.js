@@ -1,7 +1,10 @@
 var taskIdCounter  = 0;
 var formEl = document.querySelector("#task-form");
-var tasksToDoEl = document.querySelector("#tasks-to-do");
 var pageContentEl = document.querySelector("#page-content")
+var tasksToDoEl = document.querySelector("#tasks-to-do");
+var tasksInProgressEl = document.querySelector("#tasks-in-progress");
+var tasksCompletedEl = document.querySelector("#tasks-completed");
+
 
 var taskFormHandler = function(event){
 
@@ -18,16 +21,46 @@ var taskFormHandler = function(event){
   }
   formEl.reset();   // <-Resets the form after every click of the btn
 
-  //package up data as an object, creating new variables for js
-  var taskDataObj = {
-    name: taskNameInput,
-    type: taskTypeInput
-  };
+  var isEdit = formEl.hasAttribute("data-task-id"); //if we are editing, grab the ID
+  console.log(isEdit); // is the editing command true?
 
+
+    // has data attribute, so get task id and call function to complete edit process
+  if (isEdit) {
+    var taskId = formEl.getAttribute("data-task-id");
+    completeEditTask(taskNameInput, taskTypeInput, taskId);
+  } 
+  // no data attribute, so create object as normal and pass to createTaskEl function
+  else {
+    //package up data as an object, creating new variables for js
+    var taskDataObj = {
+      name: taskNameInput,
+      type: taskTypeInput
+    };
+
+  
   //send it as an arguement to createTaskEl
   createTaskEl(taskDataObj); // <- THIS CAUSES THE DATA TO ESCAPE THIS FUNCTIONS BOUNDARY AND GO TO NEXT CLOSE FUNCTIONS BY HAVING ARE VARIABLE GO INTO THE NEXT FUNCTION AS AN ARGUEMENT
-
+  }
 };
+var completeEditTask = function(taskName, taskType, taskId) {
+  console.log(taskName, taskType, taskId);
+
+    // find the matching task list item
+  var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+  // set new values
+  taskSelected.querySelector("h3.task-name").textContent = taskName;
+  taskSelected.querySelector("span.task-type").textContent = taskType;
+
+  alert("Task Updated!");
+
+  formEl.removeAttribute("data-task-id");
+  document.querySelector("#save-task").textContent = "Add Task";
+
+  
+  };
+
 
 var createTaskEl = function (taskDataObj) {
 
@@ -57,6 +90,8 @@ var createTaskEl = function (taskDataObj) {
   taskIdCounter++;
 
 };
+
+
 
 var createTaskActions = function(taskIdNumber) {
   var actionContainerEl = document.createElement("div");
@@ -114,28 +149,90 @@ formEl.addEventListener("submit", taskFormHandler); // <--- EXECUTE THE ENTIRE F
 
 var taskButtonHandler = function(event){
   console.log(event.target);
-//CREATING AN EVENT WHERE .DELETE BTN IS TOUCHED
-  if (event.target.matches(".delete-btn")){
+  //get target element from event, so that it can be used in multiple IF statements
+  var targetEl = event.target;
+
+  //creating an even where .edit btn is touched
+  if (targetEl.matches(".edit-btn")){
+    var taskId= event.target.getAttribute('data-task-id');
+    console.log(taskId);
+    editTask(taskId);
+    //edit button was clicked
+  }
+  
+  //CREATING AN EVENT WHERE .DELETE BTN IS TOUCHED
+  else if (targetEl.matches(".delete-btn")){
     console.log("you clicked a delete button!");
     //get the element's correct task id
     var taskId = event.target.getAttribute("data-task-id");
     console.log(taskId);
     deleteTask(taskId);
-  }
+    //delete button was clicked
+  } 
+
 
 };
 
 pageContentEl.addEventListener("click", taskButtonHandler)
+//gives functionality that anything in the MAIN body is clicked and has a certain purpose based on what is clicked
+
+var editTask = function(taskId){
+   //selecting the LI element through .task-item and using the data-task-id attribute with number to grab the correct LI that we are trying to edit.
+  var taskSelected = document.querySelector(".task-item[data-task-id='"+ taskId + "']");
+  console.log(taskSelected)
+  //get content froom task name and type
+  var taskName = taskSelected.querySelector("h3.task-name").textContent;
+  console.log(taskName);
+
+  var taskType = taskSelected.querySelector("span.task-type").textContent;
+  console.log(taskType);
+
+  document.querySelector("input[name='task-name']").value = taskName;
+  document.querySelector("select[name='task-type']").value = taskType;
+
+  document.querySelector("#save-task").textContent = "Save Task";
+
+  formEl.setAttribute("data-task-id", taskId);
+
+}
+
+
 
 var deleteTask = function(taskId){
   //selecting the LI element through .task-item and using the data-task-id attribute with number to grab the correct LI that we are trying to delete. 
   var taskSelected = document.querySelector(".task-item[data-task-id='"+ taskId + "']");
   console.log(taskSelected);
-  //removing the selected LI for good
+  //removing the selected LI through the new variable for good 
   taskSelected.remove();
   
  
 };
+
+var taskStatusChangeHandler = function(event){
+  console.log(event.target);
+  console.log(event.target.getAttribute("data-task-id"));
+
+  // get the task item's id
+  var taskId = event.target.getAttribute("data-task-id");
+
+  // get the currently selected option's value and convert to lowercase
+  var statusValue = event.target.value.toLowerCase();
+
+  // find the parent task item element based on the id
+  var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+  if (statusValue === "to do") {
+    tasksToDoEl.appendChild(taskSelected);
+  } 
+  else if (statusValue === "in progress") {
+    tasksInProgressEl.appendChild(taskSelected);
+  } 
+  else if (statusValue === "completed") {
+    tasksCompletedEl.appendChild(taskSelected);
+  }  
+}
+
+pageContentEl.addEventListener("change", taskStatusChangeHandler);
 
 
 
