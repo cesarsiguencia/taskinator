@@ -1,9 +1,6 @@
 var formEl = document.querySelector("#task-form");
 var tasksToDoEl = document.querySelector("#tasks-to-do");
 
-
-
-
 var taskFormHandler = function(event){
 
   event.preventDefault(); //- I DONT KNOW WHAT THIS IS
@@ -51,4 +48,7 @@ var createTaskEl = function (taskDataObj) {
 };
 
 
+
+
 formEl.addEventListener("submit", taskFormHandler); // <--- EXECUTE THE ENTIRE FUNCTION ABOVE, I don't know what submit is though
+
