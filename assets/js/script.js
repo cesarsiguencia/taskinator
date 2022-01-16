@@ -72,7 +72,7 @@ var completeEditTask = function(taskName, taskType, taskId) {
   formEl.removeAttribute("data-task-id");
   document.querySelector("#save-task").textContent = "Add Task";
 
-  
+  saveTasks();
   };
 
 
@@ -108,6 +108,7 @@ var createTaskEl = function (taskDataObj) {
   // increase task counter for next unique id
   taskIdCounter++;
 
+  saveTasks();
 };
 
 
@@ -237,7 +238,8 @@ var deleteTask = function(taskId){
 
   // reassign tasks array to be the same as updatedTaskArr
   tasks = updatedTaskArr;
- 
+  
+  saveTasks();
 };
 
 var taskStatusChangeHandler = function(event){
@@ -269,9 +271,69 @@ var taskStatusChangeHandler = function(event){
       tasks[i].status = statusValue;
     }
 }
+saveTasks();
 }
 
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
+
+var saveTasks = function() {
+  localStorage.setItem("tasks",tasks);
+
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+// Gets task items from localStorage.
+
+// Converts tasks from the string format back into an array of objects.
+
+// Iterates through a tasks array and creates task elements on the page from it.
+
+
+var loadTasks = function(){
+  var savedTasks = localStorage.getItem("tasks")
+
+  if (!savedTasks) {
+    return false;
+  }
+
+  savedTasks = JSON.parse(savedTasks);
+
+    // loop through savedTasks array
+  for (var i = 0; i < savedTasks.length; i++) {
+    // pass each task object into the `createTaskEl()` function
+    createTaskEl(savedTasks[i]);
+    console.log(savedTasks[i]);
+  }
+
+  // savedTasks[i] = taskIdCounter
+
+  // var listItemEl = document.createElement("li");
+  // listItemEl.className = "task-item";
+
+  // // add task id as a custom attribute
+  // listItemEl.setAttribute("data-task-id", savedTasks[i])
+
+  // var taskInfoEl = document.createElement("div");
+  // taskInfoEl.className = "task-info";
+
+  // taskInfoEl.innerHTML = "<h3 class='task-name'>" + savedTasks[i].name + "</h3><span class='task-type'>" + savedTasks[i].type + "</span>";
+  // listItemEl.appendChild(taskInfoEl)
+
+  // if (savedTasks[i].status === "to do"){
+  //   listItemEl.querySelector("select[name='status-change']").selectedIndex=0
+  //   listItemEl.appendChild(tasksToDoEl);
+  // } else if (savedTasks[i].status === "in progress"){
+  //   listItemEl.querySelector("select[name='status-change']").selectedIndex=1
+  //   listItemEl.appendChild(tasksInProgressEl);
+  // } else if (savedTasks[i].status === "complete"){
+  //   listItemEl.querySelector("select[name='status-change']").selectedIndex=2
+  //   listItemEl.appendChild(tasksCompletedEl);
+  // }
+
+  // taskIdCounter++
+}
+
+loadTasks();
 
 
 
