@@ -21,7 +21,7 @@ var taskFormHandler = function(event){
   }
   formEl.reset();   // <-Resets the form after every click of the btn
 
-  var isEdit = formEl.hasAttribute("data-task-id"); //if we are editing, grab the ID
+  var isEdit = formEl.hasAttribute("data-task-id"); //if we are editing, grab the ID that was already created
   console.log(isEdit); // is the editing command true?
 
 
@@ -79,19 +79,19 @@ var createTaskEl = function (taskDataObj) {
   taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
   listItemEl.appendChild(taskInfoEl)
 
-  var taskActionsEl = createTaskActions(taskIdCounter);
+  var taskActionsEl = createTaskActions(taskIdCounter); // this definition of a variable executes a function with an ID attached to it(the number of taskIdCounter). What ever that function produces, it is later called back to this current variable, which we can use here
   console.log(taskActionsEl);
   listItemEl.appendChild(taskActionsEl);
 
   //add entire list item to list
   tasksToDoEl.appendChild(listItemEl);
   
-  // increase task counter for next unique id
+  // increase task counter for next unique id with tasks
   taskIdCounter++;
 
 };
 
-
+// creates the DIV with all the edit buttons in each task, with their appopriate id number from taskIdNumber
 
 var createTaskActions = function(taskIdNumber) {
   var actionContainerEl = document.createElement("div");
@@ -135,7 +135,7 @@ var createTaskActions = function(taskIdNumber) {
     statusSelectEl.appendChild(statusOptionEl);
   }
 
-  return actionContainerEl;
+  return actionContainerEl;  // the createTaskActions function will return the actionContainerEl element when it is called, in the createTaskEl function
 }
 
 
@@ -152,7 +152,7 @@ var taskButtonHandler = function(event){
   //get target element from event, so that it can be used in multiple IF statements
   var targetEl = event.target;
 
-  //creating an even where .edit btn is touched
+  //creating an event where .edit btn is touched
   if (targetEl.matches(".edit-btn")){
     var taskId= event.target.getAttribute('data-task-id');
     console.log(taskId);
@@ -167,7 +167,7 @@ var taskButtonHandler = function(event){
     var taskId = event.target.getAttribute("data-task-id");
     console.log(taskId);
     deleteTask(taskId);
-    //delete button was clicked
+    //delete button was clicked, sending the data-task-id attribute number through taskId being called in the call back here
   } 
 
 
@@ -198,9 +198,9 @@ var editTask = function(taskId){
 
 
 
-var deleteTask = function(taskId){
+var deleteTask = function(taskId){ // taskId has the appropriate data-task-id number, ex 0,1,2nd delete btn
   //selecting the LI element through .task-item and using the data-task-id attribute with number to grab the correct LI that we are trying to delete. 
-  var taskSelected = document.querySelector(".task-item[data-task-id='"+ taskId + "']");
+  var taskSelected = document.querySelector(".task-item[data-task-id='"+ taskId + "']"); //selecting the delete button with query selector and correct attribute
   console.log(taskSelected);
   //removing the selected LI through the new variable for good 
   taskSelected.remove();
@@ -212,7 +212,7 @@ var taskStatusChangeHandler = function(event){
   console.log(event.target);
   console.log(event.target.getAttribute("data-task-id"));
 
-  // get the task item's id
+  // get the task item's id of LI clicked and set it as taskId
   var taskId = event.target.getAttribute("data-task-id");
 
   // get the currently selected option's value and convert to lowercase
