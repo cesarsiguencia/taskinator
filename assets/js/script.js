@@ -4,10 +4,7 @@ var pageContentEl = document.querySelector("#page-content")
 var tasksToDoEl = document.querySelector("#tasks-to-do");
 var tasksInProgressEl = document.querySelector("#tasks-in-progress");
 var tasksCompletedEl = document.querySelector("#tasks-completed");
-
-var tasks = [
-
-]
+var tasks = [];
 
 
 var taskFormHandler = function(event){
@@ -25,7 +22,7 @@ var taskFormHandler = function(event){
   }
   formEl.reset();   // <-Resets the form after every click of the btn
 
-  var isEdit = formEl.hasAttribute("data-task-id"); //if we are editing, grab the ID
+  var isEdit = formEl.hasAttribute("data-task-id"); //if we are editing, grab the ID/ if no attribute created yet, the new list is being created and we'll see this in the IF below
   console.log(isEdit); // is the editing command true?
 
 
@@ -172,7 +169,7 @@ var taskButtonHandler = function(event){
   //get target element from event, so that it can be used in multiple IF statements
   var targetEl = event.target;
 
-  //creating an even where .edit btn is touched
+  //creating an event where .edit btn is touched
   if (targetEl.matches(".edit-btn")){
     var taskId= event.target.getAttribute('data-task-id');
     console.log(taskId);
@@ -277,8 +274,6 @@ saveTasks();
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
 
 var saveTasks = function() {
-  localStorage.setItem("tasks",tasks);
-
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
@@ -290,20 +285,86 @@ var saveTasks = function() {
 
 
 var loadTasks = function(){
-  var savedTasks = localStorage.getItem("tasks")
+  var savedTasks = localStorage.getItem("tasks");
 
-  if (!savedTasks) {
+  if (!savedTasks){
     return false;
   }
-
+  console.log(savedTasks)
   savedTasks = JSON.parse(savedTasks);
+  console.log(savedTasks)
 
-    // loop through savedTasks array
-  for (var i = 0; i < savedTasks.length; i++) {
-    // pass each task object into the `createTaskEl()` function
-    createTaskEl(savedTasks[i]);
-    console.log(savedTasks[i]);
+  for (var i=0; i < savedTasks.length; i++){
+    createTaskEl(savedTasks[i])
   }
+
+
+
+ //=================================
+ //LONG METHOD
+
+  // if(tasks === null){ //also write as !tasks
+  //   tasks = []
+  //   return false
+  // }
+
+  // tasks = JSON.parse(tasks);
+
+  // for (var i = 0; i < tasks.length; i++){
+  //   console.log(tasks[i]);
+  //   tasks[i].id = taskIdCounter;
+
+  //   var listItemEl = document.createElement("li");
+  //   listItemEl.className = "task-item";
+  //   listItemEl.setAttribute("data-task-id",tasks[i].id)
+  //   console.log(listItemEl)
+
+  //   var taskInfoEl = document.createElement("div");
+  //   taskInfoEl.className = "task-info";
+  //   taskInfoEl.innerHTML = "<h3 class='task-name'>" + tasks[i].name + "</h3><span class='task-type'>" + tasks[i].type + "</span>";
+
+  //   listItemEl.appendChild(taskInfoEl)
+
+  //   var taskActionsEl = createTaskActions(tasks[i].id)
+
+  //   listItemEl.appendChild(taskActionsEl);
+  //   console.log(listItemEl)
+
+  //   if (tasks[i].status === "to do"){
+  //     listItemEl.querySelector("select[name='status-change']").selectedIndex = 0;
+
+  //     tasksToDoEl.appendChild(listItemEl);
+  //   } 
+  //   else if (tasks[i].status === "in-progress"){
+  //     listItemEl.querySelector("select[name='status-change']").selectedIndex = 1
+
+  //     tasksInProgressEl.appendChild(listItemEl);
+  //   } else if (tasks[i].status === "complete"){
+  //     listItemEl.querySelector("select[name='status-change']").selectedIndex = 2
+
+  //     tasksCompletedEl.appendChild(listItemEl);
+  //   }
+
+  //   taskIdCounter++
+
+  // }
+
+
+
+  // var tasks = savedTasks
+
+  // if (!savedTasks) {
+  //   return false;
+  // }
+
+  // savedTasks = JSON.parse(savedTasks);
+
+  //   // loop through savedTasks array
+  // for (var i = 0; i < savedTasks.length; i++) {
+  //   // pass each task object into the `createTaskEl()` function
+  //   createTaskEl(savedTasks[i]);
+  //   console.log(savedTasks[i]);
+  // }
 
   // savedTasks[i] = taskIdCounter
 
