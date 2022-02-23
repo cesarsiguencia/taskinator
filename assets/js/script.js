@@ -248,6 +248,7 @@ var taskStatusChangeHandler = function(event){
 
   // get the currently selected option's value and convert to lowercase
   var statusValue = event.target.value.toLowerCase();
+  console.log(statusValue)
 
   // find the parent task item element based on the id
   var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
@@ -266,9 +267,11 @@ var taskStatusChangeHandler = function(event){
   for (var i = 0; i < tasks.length; i++) {
     if (tasks[i].id === parseInt(taskId)) {
       tasks[i].status = statusValue;
-    }
-}
-saveTasks();
+    } 
+  console.log(tasks)
+  
+  }
+  saveTasks();
 }
 
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
