@@ -8,4 +8,4 @@ Tasks are saved using the local storage API. Tasks can be deleted or edited. If 
 
 Link: https://cesarsiguencia.github.io/taskinator
 
-![screenshot-1](./screenshots/1.png)
+![screenshot-1](./1.png)
